@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nextcloud-storage-pvc
+  labels:
+    apps: nextcloud
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi

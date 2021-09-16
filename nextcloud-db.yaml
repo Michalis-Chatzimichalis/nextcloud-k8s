@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-db
+  labels:
+    apps: nextcloud
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      pod-label: nextcloud-db-pod
+    template:
+      metadata:
+        labels:
+          pod-label: nextcloud-db-pod
+      spec:
+        containers:
+        - name: mariadab
+          image: mariadb:10.5
+          env:
+          - name: MARIADB_DATABASE
+            value: nextcloud
+          envFrom:
+          - secretRef:
+            name: nextcloud-db-secret #to create
+          volumeMounts:
+          - name: db-storage
+            mountPath: /var/lib/mariadb
+            subPath: mariadb-data
+        volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: nextcloud-storage-pvc
+___
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-db
+  labels:
+    app: nextcloud
+spec:
+  selector:
+    pod-label: nextcloud-db-pod
+  ports:
+  - protocol: TCP
+    port: 3306

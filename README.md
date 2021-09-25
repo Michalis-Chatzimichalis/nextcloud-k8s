@@ -1,10 +1,11 @@
 # NextCloud Server on a single-node Raspberry Pi with Kubernetes
 Set up a Nextcloud Server on a Raspberry Pi with minikube (kubectl), a Maria-DB and a 1TB WD myBook.
 
-- [Database Pod & Service Definition](#database-pod--service-definition)
-- [Server Pod & Service Definition](#server-pod--service-definition)
-- [Volume for Database and Server](#volume-for-database-and-server)
-- [Networking and Forward](#networking-and-forward)
+- [NextCloud Server on a single-node Raspberry Pi with Kubernetes](#nextcloud-server-on-a-single-node-raspberry-pi-with-kubernetes)
+  - [Database Pod & Service Definition](#database-pod--service-definition)
+  - [Server Pod & Service Definition](#server-pod--service-definition)
+  - [Volume for Database and Server](#volume-for-database-and-server)
+  - [Networking and Forward](#networking-and-forward)
 
 ## Database Pod & Service Definition
 The first part of this code concerns itself with the type of pod and also what name, labels the pod will receive.
@@ -78,10 +79,6 @@ metadata:
   name: nextcloud-server
   labels:
     app: nextcloud- [Database Pod & Service Definition](#database-pod--service-definition)
-- [Database Pod & Service Definition](#database-pod--service-definition)
-- [Server Pod & Service Definition](#server-pod--service-definition)
-- [Volume for Database and Server](#volume-for-database-and-server)
-- [Networking and Forward](#networking-and-forward)
 ```
 This part concerns itself with the inherent specifications of the pod. How many **replicas**, the **labels** that are going to be given and then the **template** that is needed to be defined, for when a pod goes down and a replacement is spun up.\
 The template will consist of a Nextcloud Image, a Volume Mount of the standard Apache Folder that serves the HTML Content, with the `sub-path` value of the folder that is going to be used. If the pod crashes the data would be lost if it would be mounted, therefore we create a PVC (Persistent Volume Claim) that saves our data and deploys it in realtime with the template pod. 
